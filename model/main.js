@@ -5,8 +5,11 @@ function preload() {
   font = loadFont('assets/Poppins-Medium.ttf');
 }
 
+let height = 800, width = 1500;
+let slider;
+
 function setup() {
-    createCanvas(400, 400);
+    createCanvas(width, height);
     textFont(font);
     textSize(fontsize);
     textAlign(CENTER, CENTER);
@@ -17,20 +20,33 @@ function setup() {
 }
 
 let nextStep = true;
+let radius = 200, nodeRadius = 40;
+let m = [[]];
+let matrix = height / 2;
+let matrixStep = 0;
 function draw() {
-    background(102);
+    clear();
+    background(105);
     let val = slider.value();
     step = val;
-    list = circleCoordinates(150,step);
+    list = circleCoordinates(radius,step);
+    matrixStep = matrix / step;
     for (i = 0; i < step; i++) {
-        for (j = i; j < step; j++) {
-            
+        for (j = i + 1; j < step; j++) {
+            line(list[i][0], list[i][1], list[j][0], list[j][1]);
         }
-        line();
         fill(255);
-        circle(list[i][0], list[i][1], 20);
-        fill(0)
+        circle(list[i][0], list[i][1], nodeRadius);
+        fill(0);
         text(i+1, list[i][0], list[i][1]);
+    }
+
+    for (i = 0; i < step; i++) {
+        for (j = 0; j < step; j++) {
+            fill(200);
+            rect((width/2)+(matrixStep*i), height / 4 + (matrixStep*j), matrixStep, matrixStep);            
+        }
+        
     }
 }
 
@@ -39,7 +55,7 @@ function circleCoordinates(radius, number) {
     t = 0;
     coordinateList = [];
     for (i = 0; i < number; i++) {
-        coordinateList.push([200 + radius*Math.sin(t), 200 + radius*Math.cos(t)]);
+        coordinateList.push([(width / 4) + radius*Math.sin(t), (height / 2) + radius*Math.cos(t + Math.PI)]);
         t += dt;
     }
     return coordinateList;
